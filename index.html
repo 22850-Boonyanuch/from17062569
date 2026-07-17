@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มเก็บข้อมูลนักเรียน</title>
+    <style>
+        /* --- Import ฟอนต์สไตล์โมเดิร์น (Prompt) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
+
+        /* --- กำหนดชุดสีธีม น้ำเงิน-เขียว --- */
+        :root {
+            --primary-blue: #0f2b5c;     /* น้ำเงินเข้มหลัก */
+            --secondary-blue: #1d4ed8;   /* น้ำเงินสว่าง */
+            --emerald-green: #10b981;    /* เขียวมรกต */
+            --mint-light: #ecfdf5;       /* เขียวมินต์อ่อนมาก */
+            --bg-body: #f1f5f9;          /* สีพื้นหลังเว็บ */
+            --text-main: #1e293b;        /* สีตัวอักษรหลัก */
+            --text-muted: #64748b;       /* สีตัวอักษรจาง */
+            --border-color: #cbd5e1;     /* สีเส้นขอบ */
+            --shadow: 0 10px 25px -5px rgba(15, 43, 92, 0.1), 0 8px 10px -6px rgba(15, 43, 92, 0.1);
+        }
+
+        /* --- Global Reset & Settings --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center; /* จัดหน้าต่างฟอร์มให้อยู่กึ่งกลางหน้าจอแนวนอน */
+            align-items: center;     /* จัดหน้าต่างฟอร์มให้อยู่กึ่งกลางหน้าจอแนวตั้ง */
+            padding: 40px 20px;
+        }
+
+        /* --- Container กล่องครอบฟอร์ม --- */
+        .form-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 950px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border-top: 8px solid var(--emerald-green);
+        }
+
+        /* --- Header ส่วนหัวฟอร์ม --- */
+        .form-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1e40af 100%);
+            color: #ffffff;
+            padding: 35px 40px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            font-size: 14px;
+            color: #93c5fd;
+            font-weight: 300;
+        }
+
+        /* --- Layout & Grid (ระบบจัดเรียงแบ่งช่องข้อความ) --- */
+        form {
+            padding: 40px;
+        }
+
+        fieldset {
+            border: none;
+            margin-bottom: 35px;
+        }
+
+        legend {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f1f5f9;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        legend::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 18px;
+            background-color: var(--emerald-green);
+            margin-right: 12px;
+            border-radius: 3px;
+        }
+
+        /* ใช้ CSS Grid ในการแบ่งช่องข้อมูลสูงสุด 12 คอลัมน์สำหรับคอมพิวเตอร์ */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        /* คลาสแบ่งสัดส่วนช่องความกว้าง */
+        .col-2  { grid-column: span 2; }
+        .col-3  { grid-column: span 3; }
+        .col-4  { grid-column: span 4; }
+        .col-5  { grid-column: span 5; }
+        .col-6  { grid-column: span 6; }
+        .col-7  { grid-column: span 7; }
+        .col-8  { grid-column: span 8; }
+        .col-9  { grid-column: span 9; }
+        .col-12 { grid-column: span 12; }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14.5px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #ef4444;
+        }
+
+        /* --- Styling Inputs (แต่งหน้าตากล่องกรอกข้อมูล) --- */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            background-color: #f8fafc;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        /* เอฟเฟกต์ตอนกดเลือกกล่องข้อความ (Focus) */
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--secondary-blue);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ตกแต่งกล่องเลือกสีเฉพาะตัว */
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            height: 43px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: none;
+            padding: 3px;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 6px; }
+
+        /* ตกแต่งกล่องอัปโหลดไฟล์ */
+        input[type="file"] {
+            padding: 6px;
+            background-color: #f8fafc;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        input[type="file"]:hover {
+            border-color: var(--emerald-green);
+            background-color: var(--mint-light);
+        }
+
+        /* --- Layout สำหรับพวก Checkbox และ Radio --- */
+        .flex-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-top: 6px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14.5px;
+        }
+
+        .option-label input {
+            margin-right: 8px;
+            accent-color: var(--primary-blue);
+            width: 17px;
+            height: 17px;
+        }
+
+        /* กล่องยอมรับเงื่อนไข */
+        .terms-container {
+            background-color: var(--mint-light);
+            border: 1px solid #d1fae5;
+            border-left: 4px solid var(--emerald-green);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* --- Buttons Area (โซนปุ่มกด) --- */
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 40px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 25px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button[type="submit"] {
+            background-color: var(--emerald-green);
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        button[type="submit"]:hover {
+            background-color: #059669;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(5, 150, 105, 0.3);
+        }
+
+        button[type="reset"] {
+            background-color: #e2e8f0;
+            color: var(--text-muted);
+        }
+
+        button[type="reset"]:hover {
+            background-color: #cbd5e1;
+            color: var(--text-main);
+        }
+
+        /* --- Responsive Design (สำหรับจอมือถือ) --- */
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            form { padding: 25px 20px; }
+            .form-header { padding: 25px 20px; }
+            
+            /* เมื่อเป็นจอมือถือ จะยุบทุกช่องคอลัมน์ให้ขยายเต็มความกว้าง 100% สไลด์ลงมาแนวตั้ง */
+            .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-12 {
+                grid-column: span 12;
+            }
+            
+            .action-buttons {
+                flex-direction: column-reverse;
+                gap: 12px;
+            }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <!-- หัวข้อใหญ่ของแบบฟอร์ม -->
+    <header class="form-header">
+        <h1>ระบบจัดเก็บประวัติข้อมูลนักเรียน</h1>
+        <p>กรุณาระบุข้อมูลส่วนตัวและการศึกษาให้ครบถ้วนถูกต้อง</p>
+    </header>
+
+    <form action="#" method="POST" enctype="multipart/form-data">
+        
+        <!-- 1. ข้อมูลส่วนตัว -->
+        <fieldset>
+            <legend>ข้อมูลส่วนตัว</legend>
+            <div class="grid-layout">
+                <div class="form-group col-3">
+                    <label for="prefix" class="required">คำนำหน้า</label>
+                    <select id="prefix" name="prefix" required>
+                        <option value="" disabled selected>เลือก...</option>
+                        <option value="นาย">นาย</option>
+                        <option value="นางสาว">นางสาว</option>
+                        <option value="เด็กชาย">เด็กชาย</option>
+                        <option value="เด็กหญิง">เด็กหญิง</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="fullname" class="required">ชื่อ-นามสกุล</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="เช่น สมชาย รักเรียน" required>
+                </div>
+                <div class="form-group col-3">
+                    <label for="nickname">ชื่อเล่น</label>
+                    <input type="text" id="nickname" name="nickname" placeholder="เช่น นนท์">
+                </div>
+                <div class="form-group col-4">
+                    <label for="student_id" class="required">เลขประจำตัวนักเรียน</label>
+                    <input type="text" id="student_id" name="student_id" placeholder="ตัวเลข 5 หลัก" pattern="[0-9]{5}" title="กรุณากรอกตัวเลข 5 หลักเท่านั้น" required>
+                </div>
+                <div class="form-group col-5">
+                    <label for="birthdate" class="required">วันเดือนปีเกิด</label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                </div>
+                <div class="form-group col-3">
+                    <label for="age" class="required">อายุ</label>
+                    <input type="number" id="age" name="age" min="1" max="99" placeholder="ปี" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 2. ข้อมูลการติดต่อ -->
+        <fieldset>
+            <legend>ข้อมูลการติดต่อ</legend>
+            <div class="grid-layout">
+                <div class="form-group col-6">
+                    <label for="email" class="required">อีเมล</label>
+                    <input type="email" id="email" name="email" placeholder="student@school.ac.th" required>
+                </div>
+                <div class="form-group col-6">
+                    <label for="tel" class="required">เบอร์โทรศัพท์</label>
+                    <input type="tel" id="tel" name="tel" placeholder="08XXXXXXXX" pattern="[0-9]{10}" title="กรุณากรอกเบอร์โทรศัพท์ 10 หลัก" required>
+                </div>
+                <div class="form-group col-12">
+                    <label for="address" class="required">ที่อยู่ปัจจุบัน</label>
+                    <textarea id="address" name="address" placeholder="ระบุบ้านเลขที่ หมู่ ซอย ถนน ตำบล อำเภอ จังหวัด..." required></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 3. ข้อมูลส่วนบุคคล -->
+        <fieldset>
+            <legend>ข้อมูลส่วนบุคคล</legend>
+            <div class="grid-layout">
+                <div class="form-group col-6">
+                    <label class="required">เพศ</label>
+                    <div class="flex-options">
+                        <label class="option-label"><input type="radio" name="gender" value="ชาย" required> ชาย</label>
+                        <label class="option-label"><input type="radio" name="gender" value="หญิง"> หญิง</label>
+                        <label class="option-label"><input type="radio" name="gender" value="ไม่ระบุ"> ไม่ระบุ</label>
+                    </div>
+                </div>
+                <div class="form-group col-6">
+                    <label for="blood_group" class="required">กรุ๊ปเลือด</label>
+                    <select id="blood_group" name="blood_group" required>
+                        <option value="" disabled selected>เลือกหมู่เลือด</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="O">O</option>
+                        <option value="AB">AB</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="religion">ศาสนา</label>
+                    <select id="religion" name="religion">
+                        <option value="พุทธ" selected>พุทธ</option>
+                        <option value="คริสต์">คริสต์</option>
+                        <option value="อิสลาม">อิสลาม</option>
+                        <option value="ฮินดู">พราหมณ์-ฮินดู</option>
+                        <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                </div>
+                <div class="form-group col-6">
+                    <label for="province" class="required">จังหวัด</label>
+                    <input type="text" id="province" name="province" placeholder="เช่น เชียงใหม่" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 4. ความสนใจ -->
+        <fieldset>
+            <legend>ความสนใจ</legend>
+            <div class="grid-layout">
+                <div class="form-group col-12">
+                    <label>งานอดิเรก (เลือกได้มากกว่า 1 ข้อ)</label>
+                    <div class="flex-options">
+                        <label class="option-label"><input type="checkbox" name="hobbies" value="อ่านหนังสือ"> อ่านหนังสือ</label>
+                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="เล่นกีฬา"> เล่นกีฬา</label>
+                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="เล่นดนตรี/ฟังเพลง"> เล่นดนตรี/ฟังเพลง</label>
+                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="วาดภาพ/ศิลปะ"> วาดภาพ/ศิลปะ</label>
+                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="เล่นเกม/คอมพิวเตอร์"> เล่นเกม/เทคโนโลยี</label>
+                    </div>
+                </div>
+                <div class="form-group col-4">
+                    <label for="fav_color">สีที่ชอบ</label>
+                    <input type="color" id="fav_color" name="fav_color" value="#10b981">
+                </div>
+                <div class="form-group col-8">
+                    <label for="fav_url">เว็บไซต์ที่ชอบ (URL)</label>
+                    <input type="url" id="fav_url" name="fav_url" placeholder="https://www.google.com">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 5. ข้อมูลการศึกษา -->
+        <fieldset>
+            <legend>ข้อมูลการศึกษา</legend>
+            <div class="grid-layout">
+                <div class="form-group col-4">
+                    <label for="class_level" class="required">ระดับชั้น</label>
+                    <select id="class_level" name="class_level" required>
+                        <option value="" disabled selected>เลือกระดับชั้น</option>
+                        <option value="ม.1">มัธยมศึกษาปีที่ 1</option>
+                        <option value="ม.2">มัธยมศึกษาปีที่ 2</option>
+                        <option value="ม.3">มัธยมศึกษาปีที่ 3</option>
+                        <option value="ม.4">มัธยมศึกษาปีที่ 4</option>
+                        <option value="ม.5">มัธยมศึกษาปีที่ 5</option>
+                        <option value="ม.6">มัธยมศึกษาปีที่ 6</option>
+                    </select>
+                </div>
+                <div class="form-group col-2">
+                    <label for="classroom" class="required">ห้องเรียน</label>
+                    <input type="number" id="classroom" name="classroom" min="1" max="15" placeholder="เช่น 2" required>
+                </div>
+                <div class="form-group col-4">
+                    <label for="study_program" class="required">แผนการเรียน</label>
+                    <select id="study_program" name="study_program" required>
+                        <option value="" disabled selected>เลือกแผนการเรียน</option>
+                        <option value="วิทย์-คณิต">วิทยาศาสตร์-คณิตศาสตร์</option>
+                        <option value="ศิลป์-คำนวณ">ศิลป์-คำนวณ</option>
+                        <option value="ศิลป์-ภาษา">ศิลป์-ภาษา</option>
+                        <option value="ทั่วไป">ทั่วไป/อื่นๆ</option>
+                    </select>
+                </div>
+                <div class="form-group col-2">
+                    <label for="gpa" class="required">เกรดเฉลี่ย</label>
+                    <input type="number" id="gpa" name="gpa" min="0.00" max="4.00" step="0.01" placeholder="3.50" required>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 6. การอัปโหลดไฟล์ -->
+        <fieldset>
+            <legend>การอัปโหลดไฟล์เอกสาร</legend>
+            <div class="grid-layout">
+                <div class="form-group col-6">
+                    <label for="avatar_img" class="required">รูปภาพประจำตัวนักเรียน</label>
+                    <input type="file" id="avatar_img" name="avatar_img" accept="image/*" required>
+                </div>
+                <div class="form-group col-6">
+                    <label for="more_docs">เอกสารเพิ่มเติม (PDF หรือ รูปภาพ)</label>
+                    <input type="file" id="more_docs" name="more_docs" accept=".pdf, image/*">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 7. ความคิดเห็นเพิ่มเติม -->
+        <fieldset>
+            <legend>ความคิดเห็นเพิ่มเติม</legend>
+            <div class="grid-layout">
+                <div class="form-group col-12">
+                    <label for="comment_box">ความคิดเห็นหรือข้อเสนอแนะเพิ่มเติม</label>
+                    <textarea id="comment_box" name="comment_box" placeholder="พิมพ์ข้อความที่ต้องการติดต่อหรือแจ้งข้อเสนอแนะที่นี่..."></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 8. ยืนยันข้อมูล -->
+        <div class="terms-container">
+            <label class="option-label">
+                <input type="checkbox" name="confirm_terms" id="confirm_terms" required>
+                <span>ข้าพเจ้ายอมรับเงื่อนไขการใช้งานระบบ และยืนยันว่าข้อมูลประวัติทั้งหมดถูกต้องตรงตามความเป็นจริง</span>
+            </label>
+        </div>
+
+        <!-- ปุ่มปฏิบัติการ -->
+        <div class="action-buttons">
+            <button type="reset">ล้างข้อมูล</button>
+            <button type="submit">ส่งข้อมูล</button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>
