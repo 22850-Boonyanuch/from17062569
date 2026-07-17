@@ -8,17 +8,17 @@
         /* --- Import ฟอนต์สไตล์โมเดิร์น (Prompt) --- */
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
 
-        /* --- กำหนดชุดสีธีม น้ำเงิน-เขียว --- */
+        /* --- กำหนดชุดสีธีม น้ำเงิน-เขียว พร้อมพื้นหลังม่วงอ่อน --- */
         :root {
             --primary-blue: #0f2b5c;     /* น้ำเงินเข้มหลัก */
             --secondary-blue: #1d4ed8;   /* น้ำเงินสว่าง */
             --emerald-green: #10b981;    /* เขียวมรกต */
             --mint-light: #ecfdf5;       /* เขียวมินต์อ่อนมาก */
-            --bg-body: #f1f5f9;          /* สีพื้นหลังเว็บ */
+            --bg-lavender: #f3effb;      /* สีพื้นหลังม่วงอ่อนพาสเทล */
             --text-main: #1e293b;        /* สีตัวอักษรหลัก */
             --text-muted: #64748b;       /* สีตัวอักษรจาง */
             --border-color: #cbd5e1;     /* สีเส้นขอบ */
-            --shadow: 0 10px 25px -5px rgba(15, 43, 92, 0.1), 0 8px 10px -6px rgba(15, 43, 92, 0.1);
+            --shadow: 0 10px 25px -5px rgba(15, 43, 92, 0.08), 0 8px 10px -6px rgba(15, 43, 92, 0.08);
         }
 
         /* --- Global Reset & Settings --- */
@@ -30,7 +30,7 @@
         }
 
         body {
-            background-color: var(--bg-body);
+            background-color: var(--bg-lavender); /* เปลี่ยนเป็นสีม่วงอ่อนพาสเทลเรียบร้อยครับ */
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -402,10 +402,10 @@
                     <label>งานอดิเรก (เลือกได้มากกว่า 1 ข้อ)</label>
                     <div class="flex-options">
                         <label class="option-label"><input type="checkbox" name="hobbies" value="อ่านหนังสือ"> อ่านหนังสือ</label>
-                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="เล่นกีฬา"> เล่นกีฬา</label>
-                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="เล่นดนตรี/ฟังเพลง"> เล่นดนตรี/ฟังเพลง</label>
-                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="วาดภาพ/ศิลปะ"> วาดภาพ/ศิลปะ</label>
-                        <label class="option-item option-label"><input type="checkbox" name="hobbies" value="เล่นเกม/คอมพิวเตอร์"> เล่นเกม/เทคโนโลยี</label>
+                        <label class="option-label"><input type="checkbox" name="hobbies" value="เล่นกีฬา"> เล่นกีฬา</label>
+                        <label class="option-label"><input type="checkbox" name="hobbies" value="เล่นดนตรี/ฟังเพลง"> เล่นดนตรี/ฟังเพลง</label>
+                        <label class="option-label"><input type="checkbox" name="hobbies" value="วาดภาพ/ศิลปะ"> วาดภาพ/ศิลปะ</label>
+                        <label class="option-label"><input type="checkbox" name="hobbies" value="เล่นเกม/คอมพิวเตอร์"> เล่นเกม/เทคโนโลยี</label>
                     </div>
                 </div>
                 <div class="form-group col-4">
@@ -501,3 +501,4 @@
 
 </body>
 </html>
+
